@@ -16,7 +16,17 @@ public class DigestDemo1 {
         String input = "aa";
         // 算法
         String algorithm = "MD5";
-        System.out.println(getDigest(input, algorithm));
+        String md5 = getDigest(input, algorithm);
+        System.out.println("md5=="+md5);
+
+        String sha1 = getDigest(input, "SHA-1");
+        System.out.println("sha1=="+sha1);
+
+        String sha256 = getDigest(input, "SHA-256");
+        System.out.println("sha256=="+sha256);
+
+        String sha512 = getDigest(input, "SHA-512");
+        System.out.println("sha512=="+sha512);
     }
 
     /**
