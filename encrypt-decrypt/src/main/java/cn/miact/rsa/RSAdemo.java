@@ -33,12 +33,26 @@ public class RSAdemo {
         // 生成密钥对并保存在本地文件中
         generateKeyToFile(algorithm,"a.pub","a.pri");
 
-        String s = encryptRSA(algorithm, privateKey, input);
-        System.out.println(s);
+        String privateKeyString = getPrivateKey("a.pri",algorithm);
 
-        String s1 = decryptRSA(algorithm, publicKey, s);
-        System.out.println(s1);
+        System.out.println(privateKeyString);
 
+//        String s = encryptRSA(algorithm, privateKey, input);
+//        System.out.println(s);
+//
+//        String s1 = decryptRSA(algorithm, publicKey, s);
+//        System.out.println(s1);
+
+    }
+
+    /**
+     * 读取私钥
+     * @param priKeyPath 私钥的路径
+     * @param algorithm  算法
+     * @return
+     */
+    private static String getPrivateKey(String priKeyPath, String algorithm) throws Exception{
+        return FileUtils.readFileToString(new File(priKeyPath), StandardCharsets.UTF_8);
     }
 
     /**
