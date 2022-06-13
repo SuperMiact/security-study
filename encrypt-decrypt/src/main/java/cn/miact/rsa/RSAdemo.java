@@ -49,5 +49,10 @@ public class RSAdemo {
         // 使用私钥进行加密
         byte[] bytes = cipher.doFinal(input.getBytes());
         System.out.println(Base64.getEncoder().encodeToString(bytes));
+
+        // 公钥解密
+        cipher.init(Cipher.DECRYPT_MODE,publicKey);
+        byte[] bytes1 = cipher.doFinal(bytes);
+        System.out.println(new String(bytes1,0,bytes1.length));
     }
 }
