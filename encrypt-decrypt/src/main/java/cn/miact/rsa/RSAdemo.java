@@ -7,6 +7,8 @@ import javax.crypto.Cipher;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 /**
@@ -22,27 +24,36 @@ public class RSAdemo {
         // 创建密钥对
         String algorithm = "RSA";
 
-        KeyPairGenerator rsa = KeyPairGenerator.getInstance(algorithm);
-//        // 生成密钥对
-        KeyPair keyPair = rsa.generateKeyPair();
-//        // 生成私钥
-        PrivateKey privateKey = keyPair.getPrivate();
-//        // 生成公钥
-        PublicKey publicKey = keyPair.getPublic();
-
         // 生成密钥对并保存在本地文件中
         generateKeyToFile(algorithm,"a.pub","a.pri");
 
-        String privateKeyString = getPrivateKey("a.pri",algorithm);
+        // 获取私钥key
+        PrivateKey privateKey = getPrivateKey("a.pri", algorithm);
+        // 获取公钥key
+        PublicKey publicKey = getPublicKey("a.pub", algorithm);
 
-        System.out.println(privateKeyString);
 
-//        String s = encryptRSA(algorithm, privateKey, input);
-//        System.out.println(s);
-//
-//        String s1 = decryptRSA(algorithm, publicKey, s);
-//        System.out.println(s1);
+        String encryptData = encryptRSA(algorithm, privateKey, input);
+        System.out.println(encryptData);
 
+        String decryptData = decryptRSA(algorithm, publicKey, encryptData);
+        System.out.println(decryptData);
+
+    }
+
+    /**
+     * 读取公钥
+     * @param pubKeyPath 公钥的路径
+     * @param algorithm  算法
+     * @return
+     */
+    private static PublicKey getPublicKey(String pubKeyPath, String algorithm) throws Exception{
+        String publicKeyString = FileUtils.readFileToString(new File(pubKeyPath), StandardCharsets.UTF_8);
+        // 创建key的工厂
+        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+        // 创建公钥规则
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyString));
+        return keyFactory.generatePublic(keySpec);
     }
 
     /**
@@ -51,8 +62,14 @@ public class RSAdemo {
      * @param algorithm  算法
      * @return
      */
-    private static String getPrivateKey(String priKeyPath, String algorithm) throws Exception{
-        return FileUtils.readFileToString(new File(priKeyPath), StandardCharsets.UTF_8);
+    private static PrivateKey getPrivateKey(String priKeyPath, String algorithm) throws Exception{
+        String privateKeyString = FileUtils.readFileToString(new File("a.pri"), StandardCharsets.UTF_8);
+        // 创建key的工厂
+        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+        // 创建私钥key的规则
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyString));
+        // 返回私钥对象
+        return keyFactory.generatePrivate(keySpec);
     }
 
     /**
