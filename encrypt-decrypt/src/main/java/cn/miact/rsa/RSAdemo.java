@@ -47,7 +47,7 @@ public class RSAdemo {
      * @param algorithm  算法
      * @return
      */
-    private static PublicKey getPublicKey(String pubKeyPath, String algorithm) throws Exception{
+    public static PublicKey getPublicKey(String pubKeyPath, String algorithm) throws Exception{
         String publicKeyString = FileUtils.readFileToString(new File(pubKeyPath), StandardCharsets.UTF_8);
         // 创建key的工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
@@ -62,7 +62,7 @@ public class RSAdemo {
      * @param algorithm  算法
      * @return
      */
-    private static PrivateKey getPrivateKey(String priKeyPath, String algorithm) throws Exception{
+    public static PrivateKey getPrivateKey(String priKeyPath, String algorithm) throws Exception{
         String privateKeyString = FileUtils.readFileToString(new File("a.pri"), StandardCharsets.UTF_8);
         // 创建key的工厂
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
